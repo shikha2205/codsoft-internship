@@ -1,0 +1,44 @@
+import java.util.*;
+public class StudentGradeCalculator {
+    public static void main(String args[]){
+    Scanner sc=new Scanner(System.in);
+    System.out.print("Enter the marks of English:");
+    int English=sc.nextInt();
+    System.out.print("Enter the marks of Maths:");
+    int Maths=sc.nextInt();
+    System.out.print("Enter the marks of Science:");
+    int Science=sc.nextInt();
+    System.out.print("Enter the marks of Hindi:");
+    int Hindi=sc.nextInt();
+    System.out.print("Enter the marks of Computer:");
+    int Computer=sc.nextInt();
+    int totalMarks=English+Maths+Science+Hindi+Computer;
+    System.out.println("Total Marks of all subjects are:" +totalMarks);
+   
+    int averagePercent=(totalMarks*100)/500;
+    System.out.println("Average percentage of Student: "+averagePercent);
+    char Grade;
+    if(averagePercent>=90||averagePercent==100){
+        Grade='A';
+            
+    }
+    else if(averagePercent<90&&averagePercent>=80){
+        Grade='B';
+           
+    }
+    else if(averagePercent<=80&&averagePercent>=70){
+        Grade='C';
+            
+    }
+    else{
+        System.out.println("Fail");
+        return;
+    }
+    System.out.println("Grade: " + Grade);
+    System.out.println("All details of a student are given below");
+    System.out.println("Total Marks:"+totalMarks);
+    System.out.println("Average percentage:"+averagePercent);
+    
+    System.out.println("Grade of the student is:"+Grade);
+    }
+}
