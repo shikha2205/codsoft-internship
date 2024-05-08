@@ -1,1 +1,64 @@
+import java.util.*;
+public class NumberGame {
+    public static void main(String[] args){
+        Scanner sc=new Scanner(System.in);
+        int totalattempts=0;
+        int totalwins=0; 
+        while (true) {
+            totalattempts++;
+            int  result=playGame(sc); 
+            if(result==1){
+                totalwins++;
+            }
+
+            System.out.print("Do you want to play again? (yes/no): ");
+            String playAgain = sc.next();
+
+            if (!playAgain.equalsIgnoreCase("yes")) {
+                System.out.println("Thanks for playing! Goodbye!");
+                System.out.println("total attempts play:"+totalattempts);
+                System.out.println("total wins:"+totalwins);
+                break;
+            }
+        }
+    }
+    public static int playGame(Scanner sc){
+        
+
+          
+        Random rand = new Random();
+        int randomNumber = rand.nextInt(100) + 1; 
+
+        System.out.println("Random number between 1 and 100: " + randomNumber);
+       System.out.println("Guess the random number between 1 and 100:");
+        int guess;
+        int maxAttempt=3;
+       
+       
+        for (int Attempt = 1; Attempt<=maxAttempt; Attempt++) {
+            
+            System.out.print("Attempt " + Attempt + ": Enter your guess: ");
+            guess = sc.nextInt();
+
+            if (guess < randomNumber) {
+                System.out.println("Smaller than generated number, Try again.");
+            }
+             else if (guess > randomNumber) {
+                System.out.println("Greater than generated number, Try again.");
+            }
+             
+            else{
+                System.out.println("Congratulations! You guessed the correct number: " + randomNumber);
+                return 1;
+                //break;
+
+             }
+             if (Attempt == maxAttempt) {
+                System.out.println("No more attempts left. The correct number was: " + randomNumber);
+            }
+        }
+        return 0;
+    }
+    
+}
 
