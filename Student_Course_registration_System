@@ -1,0 +1,181 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+class Course {
+    private String courseId;
+    private String courseTitle;
+    private String courseDescription;
+    private int capacity;
+    private String schedule;
+
+    public Course(String courseId, String courseTitle, String courseDescription, int capacity, String schedule) {
+        this.courseId = courseId;
+        this.courseTitle = courseTitle;
+        this.courseDescription = courseDescription;
+        this.capacity = capacity;
+        this.schedule = schedule;
+    }
+
+    public String getCourseId() {
+        return courseId;
+    }
+
+    public String getCourseTitle() {
+        return courseTitle;
+    }
+
+    public String getCourseDescription() {
+        return courseDescription;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public String getSchedule() {
+        return schedule;
+    }
+}
+
+class Student {
+    private String studentId;
+    private String studentName;
+    private List<String> registeredCourses;
+
+    public Student(String studentId, String studentName) {
+        this.studentId = studentId;
+        this.studentName = studentName;
+        this.registeredCourses = new ArrayList<>();
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public List<String> getRegisteredCourses() {
+        return registeredCourses;
+    }
+
+    public void registerCourse(String courseId) {
+        registeredCourses.add(courseId);
+    }
+
+    public void dropCourse(String courseId) {
+        registeredCourses.remove(courseId);
+    }
+}
+
+class Database {
+    private Map<String, Course> courses;
+    private Map<String, Student> students;
+
+    public Database() {
+        this.courses = new HashMap<>();
+        this.students = new HashMap<>();
+    }
+
+    public void addCourse(Course course) {
+        courses.put(course.getCourseId(), course);
+    }
+
+    public Course getCourse(String courseId) {
+        return courses.get(courseId);
+    }
+
+    public void addStudent(Student student) {
+        students.put(student.getStudentId(), student);
+    }
+
+    public Student getStudent(String studentId) {
+        return students.get(studentId);
+    }
+
+    public Map<String, Course> getCourses() {
+        return courses;
+    }
+
+    public Map<String, Student> getStudents() {
+        return students;
+    }
+    public int getStudentsEnrolledCount(String courseId) {
+        int count = 0;
+        for (Student student : students.values()) {
+            if (student.getRegisteredCourses().contains(courseId)) {
+                count++;
+            }
+        }
+        return count;
+    }
+}
+
+public class Student_course_registration_system{
+    public static void main(String[] args) {
+        Database database = new Database();
+        database.addCourse(new Course("DSA0021", "DSA", "Introduction to DATA STRUCTURE AND ALGORITHM", 30, "Mon/Wed/Fri 9:00-10:00"));
+        database.addCourse(new Course("PYT0022", "PYTHON", "Introduction to PYTHON PROGRAMMING", 25, "Tue/Thu 11:00-12:30"));
+        database.addCourse(new Course("JAVA0023", "JAVA", "Introduction to JAVA PROGRAMMING", 20, "Mon/Wed 13:00-14:30"));
+
+        database.addStudent(new Student("S001", "SHIKHA"));
+        database.addStudent(new Student("S002", "HIMANSHU"));
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Welcome to Student Course Registration System");
+
+        while (true) {
+            System.out.println("\nAvailable Courses:");
+            for (Course course : database.getCourses().values()) {
+                System.out.println(course.getCourseId() + " - " + course.getCourseTitle() +
+                        " (Slots: " + (course.getCapacity() - database.getStudentsEnrolledCount(course.getCourseId())) + "/" + course.getCapacity() + ")");
+            }
+
+            System.out.print("\nEnter Course ID to register/drop (q to quit): ");
+            String courseId = sc.nextLine().trim();
+            if (courseId.equalsIgnoreCase("q")) {
+                break;
+            }
+
+            System.out.print("Enter Student ID: ");
+            String studentId = sc.nextLine().trim();
+
+            System.out.print("enter student name:");
+            String studentName=sc.nextLine().trim();
+
+            Student student = database.getStudent(studentId);
+            if (student == null) {
+                System.out.println("Student not found. Please enter a valid student ID.");
+                continue;
+            }
+
+            Course course = database.getCourse(courseId);
+            if (course == null) {
+                System.out.println("Course not found. Please enter a valid course ID.");
+                continue;
+            }
+
+            if (student.getRegisteredCourses().contains(courseId)) {
+                // If student is already registered for the course, drop the course
+                student.dropCourse(courseId);
+                System.out.println("Course dropped successfully.");
+            } else {
+                // If student is not registered for the course, register for the course
+                if (database.getStudentsEnrolledCount(courseId) < course.getCapacity()) {
+                    student.registerCourse(courseId);
+                    System.out.println("Course registered successfully.");
+                } else {
+                    System.out.println("Sorry, the course is full. Registration failed.");
+                }
+            }
+        }
+
+        System.out.println("Thank you for using Student Course Registration System!");
+    }
+}
+    
+
